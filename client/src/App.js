@@ -18,7 +18,7 @@ class App extends Component {
   // API Calls
   //
   fetchTodos() {
-    fetch('http://localhost:8080/todos')
+    fetch('http://192.168.99.100:30001/todos')
       .then(res => res.json())
       .then(todos => {
         this.setState({ todos });
@@ -26,7 +26,7 @@ class App extends Component {
   }
 
   postTodo(todo, callback) {
-    fetch('http://localhost:8080/todos', {
+    fetch('http://192.168.99.100:30001/todos', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json'
@@ -40,7 +40,7 @@ class App extends Component {
   }
 
   putTodoComplete(todo, callback) {
-    fetch(`http://localhost:8080/todos/${todo._id}`, {
+    fetch(`http://192.168.99.100:30001/todos/${todo._id}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ class App extends Component {
   }
 
   deleteTodo(todoId, callback) {
-    fetch(`http://localhost:8080/todos/${todoId}`, {
+    fetch(`http://192.168.99.100:30001/todos/${todoId}`, {
         method: 'delete'
       })
       .then(() => {
