@@ -10,13 +10,13 @@ module.exports = function(server) {
 		let data = req.body || {};
 
 		let todo = new Todo(data);
-		todo.save(function(err) {
+		todo.save(function(err, doc) {
 			if (err) {
 				console.error(err);
 				return next(new errors.InternalError(err.message));
-			}
-
-			res.send(201);
+      }
+      
+			res.send(201, doc);
 			next();
 		});
 	});
@@ -35,6 +35,44 @@ module.exports = function(server) {
 
 			res.send(docs);
 			next();
+		});
+  });
+
+  //
+  // Todo Update
+  //
+	server.put('/todos/:todo_id', (req, res, next) => {
+		const data = req.body || {};
+
+		if (!data._id) {
+      data = { ...data, _id: req.params.todo_id }
+		}
+
+		Todo.findOne({ _id: req.params.todo_id }, function(err, doc) {
+			if (err) {
+				console.error(err);
+				return next(
+					new errors.InvalidContentError(err.errors.name.message),
+				);
+			} else if (!doc) {
+				return next(
+					new errors.ResourceNotFoundError(
+						'The resource you requested could not be found.',
+					),
+				);
+			}
+
+			Todo.update({ _id: data._id }, data, function(err) {
+				if (err) {
+					console.error(err);
+					return next(
+						new errors.InvalidContentError(err.errors.name.message),
+					);
+				}
+
+				res.send(200, data);
+				next();
+			});
 		});
 	});
 

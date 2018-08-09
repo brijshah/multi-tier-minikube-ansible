@@ -1,0 +1,22 @@
+.c-list {
+  list-style: none;
+  padding: 0;
+}
+
+.c-list li {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+.c-list-label {
+  background: #ffffff;
+  border: 1px solid rgba(34,36,38,.15);
+  border-radius: 3px;
+  padding: 6px 10px;
+  flex: 1;
+}
+
+.c-list-label-complete {
+  background: lightgreen;
+}

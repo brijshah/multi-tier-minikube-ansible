@@ -1,0 +1,7 @@
+.c-input {
+  max-width: 100%;
+  border: 1px solid rgba(34,36,38,.15);
+  border-radius: 3px;
+  padding: 6px 10px;
+  flex: 1;
+}

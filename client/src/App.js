@@ -14,6 +14,9 @@ class App extends Component {
     this.fetchTodos();
   }
 
+  //
+  // API Calls
+  //
   fetchTodos() {
     fetch('http://localhost:8080/todos')
       .then(res => res.json())
@@ -30,23 +33,38 @@ class App extends Component {
         },
         body: JSON.stringify(todo)
       })
+      .then(res => res.json())
+      .then((todo) => {
+        callback(todo);
+      })
+  }
+
+  putTodoComplete(todo, callback) {
+    fetch(`http://localhost:8080/todos/${todo._id}`, {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ...todo, status: 'complete' })
+    })
+    .then(res => res.json())
+    .then((todo) => {
+      callback(todo);
+    })
+  }
+
+  deleteTodo(todoId, callback) {
+    fetch(`http://localhost:8080/todos/${todoId}`, {
+        method: 'delete'
+      })
       .then(() => {
         callback();
       })
   }
 
-  render() {
-    const { todo, todos } = this.state;
-
-    return (
-      <div>
-        <Input value={todo} onChange={this.handleTodoChange} />
-        <Button onClick={this.handleAddTodo}>Add Todo</Button>
-        <List items={todos}></List>
-      </div>
-    );
-  }
-
+  //
+  // Event Handlers
+  //
   handleTodoChange = (e) => {
     const todo = e.target.value;
     this.setState({ todo });
@@ -60,17 +78,60 @@ class App extends Component {
       return;
     }
 
-    this.postTodo({ label: todo }, () => {
+    this.postTodo({ label: todo }, (newTodo) => {
       // clear input field
       // add todo to list
       this.setState({
         todo: "",
-        todos: [...todos, {
-          label: todo
-        }]
+        todos: [...todos, newTodo]
       });
     })
+  }
 
+  handleDelete = (oldTodo) => {
+    const { todos } = this.state;
+    this.deleteTodo(oldTodo._id, () => {
+      // remove todo from list
+      this.setState({
+        todos: todos.filter(todo => todo._id !== oldTodo._id)
+      });
+    })
+  }
+
+  handleCheck = (todo) => {    
+    const { todos } = this.state;
+    this.putTodoComplete(todo, (newTodo) => {
+      const newTodos = [...todos];
+      const index = newTodos.findIndex(item => item._id === todo._id);
+      newTodos[index] = newTodo;
+
+      this.setState({
+        todos: newTodos
+      });
+    })
+  }
+
+  //
+  // Component Render
+  //  
+  render() {
+    const { todo, todos } = this.state;
+
+    return (
+      <div className="flex flex--center">
+        <div className="todo-list">
+          <h1>todos</h1>
+          <div className="flex">
+            <Input value={todo} onChange={this.handleTodoChange} />
+            <Button style={{ marginLeft: "10px" }} onClick={this.handleAddTodo}>➕</Button>
+          </div>
+          <List items={todos}
+            onCheck={this.handleCheck}
+            onDelete={this.handleDelete}
+            />
+        </div>
+      </div>
+    );
   }
 }
 
