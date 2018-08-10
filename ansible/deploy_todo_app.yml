@@ -7,4 +7,4 @@
     - { role: bootstrap_linux, when: bootstrap == 'yes' }
     - { role: setup_minikube, when: deploy }
     - { role: deploy_todo_application, when: deploy }
-    - { role: teardown_minikube, when: not deploy }
+    - { role: teardown_minikube, when: not deploy|bool }

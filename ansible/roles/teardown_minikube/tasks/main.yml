@@ -1,0 +1,9 @@
+---
+
+- name: Stop minikube
+  command: minikube stop
+  register: stop_minikube
+  failed_when: "stop_minikube is failed and 'does not exist' not in stop_minikube.stderr"
+
+- name: Delete minikube
+  command: minikube delete
