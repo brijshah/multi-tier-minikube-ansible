@@ -1,0 +1,6 @@
+---
+
+- name: Start minikube
+  command: minikube start
+  register: minikube_start
+  failed_when: "minikube_start is failed and 'ERROR' not in minikube_start.stderr"
