@@ -1,0 +1,6 @@
+---
+
+registry_url: brijshah/multi-tier-minikube
+mongo_image: mongo
+client_image: client
+server_image: server

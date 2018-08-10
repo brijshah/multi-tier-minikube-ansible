@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-service
+  namespace: todo
+  labels:
+    app: react-app
+spec:
+#  type: LoadBalancer
+  type: NodePort
+  ports:
+  - port: 3000
+    targetPort: 3000
+    nodePort: 30003
+  selector:
+    app: react-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-deployment
+  namespace: todo
+  labels:
+    app: react-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react-app
+  template:
+    metadata:
+      labels:
+        app: react-app
+    spec:
+      containers:
+      - name: react-app
+        image: {{ registry_url }}:{{ client_image }}
+        ports:
+        - containerPort: 3000

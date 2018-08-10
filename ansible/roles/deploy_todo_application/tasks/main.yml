@@ -1,0 +1,39 @@
+---
+
+- name: Generate deployment files
+  template:
+    src: "{{ item }}.j2"
+    dest: "./{{ item }}"
+  with_items:
+    - db-deployment.yml
+    - backend-deployment.yml
+    - react-deployment.yml
+
+- name: Create todo namespace
+  command: kubectl create namespace todo
+  register: create_namespace
+  failed_when: "create_namespace is failed and 'AlreadyExists' not in create_namespace.stderr"
+
+- name: Deploy mongodb
+  command: >
+    kubectl apply
+    -f db-deployment.yml
+
+- name: Deploy Backend
+  command: >
+    kubectl apply
+    -f backend-deployment.yml
+
+- name: Deploy Frontend
+  command: >
+    kubectl apply
+    -f react-deployment.yml
+
+- name: Cleanup generated deployment files
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - db-deployment.yml
+    - backend-deployment.yml
+    - react-deployment.yml
