@@ -65,6 +65,11 @@ class App extends Component {
   //
   // Event Handlers
   //
+
+  // React lets us know when the input field changes as in the user types a new character or deletes a character
+  // You can create a handler for onChange to take care of this event
+  // handleTodoChange is in charge, React will pass the event (e) into our handler
+  // e.target is the actual html element the <input/> tag
   handleTodoChange = (e) => {
     const todo = e.target.value;
     this.setState({ todo });
@@ -114,6 +119,13 @@ class App extends Component {
   //
   // Component Render
   //  
+
+  // w/ React the most important method is render(). It returns plain old html
+  // Whats important to note about the App component is that it renders a input field + button combo and a list component
+  // Input field to allow user input for their todo and the button to actually handle the action when they are finished
+  // 
+  // the input field will keep track of what the user is typing, need to keep it in state since its always changing
+  // handleAddTodo will check if the user wrote any thing in the input box, if yes it'll fire an API Call to save that new todo
   render() {
     const { todo, todos } = this.state;
 

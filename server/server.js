@@ -24,7 +24,8 @@ const cors = corsMiddleware({
 server.pre(cors.preflight)
 server.use(cors.actual)
 
-
+// The server will use mongoose to do all the heavy lifting
+// It talks to the mongoDB with the config db settings
 server.listen(config.PORT, function() {
 	mongoose.Promise = global.Promise;
   mongoose.connect(config.db.uri, { useNewUrlParser: true });
@@ -36,6 +37,7 @@ server.listen(config.PORT, function() {
 	    process.exit(1);
 	});
 
+	// expose routes
 	db.once('open', () => {
       routes(server);
       console.log('%s listening at %s', server.name, server.url);

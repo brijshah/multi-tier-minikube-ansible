@@ -5,10 +5,11 @@ module.exports = function(server) {
 
   //
   // Todo Create
-  //
+  // Creates a new todo
 	server.post('/todos', (req, res, next) => {
 		let data = req.body || {};
 
+		// passes the data that we need to create a todo model
 		let todo = new Todo(data);
 		todo.save(function(err, doc) {
 			if (err) {
@@ -23,7 +24,7 @@ module.exports = function(server) {
 
   //
   // Todo List
-  //
+  // fetches all todos
 	server.get('/todos', (req, res, next) => {
 		Todo.find({}, function(err, docs) {
 			if (err) {
@@ -40,7 +41,7 @@ module.exports = function(server) {
 
   //
   // Todo Update
-  //
+  // updates a single todo
 	server.put('/todos/:todo_id', (req, res, next) => {
 		const data = req.body || {};
 
@@ -78,7 +79,7 @@ module.exports = function(server) {
 
   //
   // Todo Delete
-  //
+  // deletes a todo
 	server.del('/todos/:todo_id', (req, res, next) => {
 		Todo.remove({ _id: req.params.todo_id }, function(err) {
 			if (err) {
